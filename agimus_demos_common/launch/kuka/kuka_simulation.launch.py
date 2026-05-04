@@ -12,16 +12,18 @@ from controller_manager.launch_utils import (
 from agimus_demos_common.launch_utils_kuka import (
     path_join,
     include_path_join,
+    SetupContext,
 )
 
 def launch_setup(
     context: LaunchContext, *args, **kwargs
 ) -> list[LaunchDescriptionEntity]:
+    ctx = SetupContext(context)
 
-    gz_verbose_bool = LaunchConfiguration("gz_verbose").perform(context).lower() == "true"
-    gz_headless_bool = LaunchConfiguration("gz_headless").perform(context).lower() == "true"
+    gz_verbose_bool = ctx.config_bool("gz_verbose")
+    gz_headless_bool = ctx.config_bool("gz_headless")
     gz_gui_config_path_str = path_join("config", "gz_gui.config").perform(context)
-    robot_name_str = LaunchConfiguration("robot_name").perform(context)
+    robot_name_str = ctx.config("robot_name")
 
     world = path_join("config", "kuka", "gazebo_empty_world.sdf").perform(context)
 

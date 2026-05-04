@@ -11,6 +11,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from agimus_demos_common.launch_utils_kuka import (
     path_join,
     generate_default_kuka_args,
+    SetupContext,
 )
 
 
@@ -22,7 +23,14 @@ def launch_setup(
         "joint_state_estimator",
     ]
 
-    controller_params = LaunchConfiguration("linear_feedback_controller_params")
+    ctx = SetupContext(context)
+    if ctx.config_bool("use_passthrough_state_publisher"):
+        controllers_names += ["effort_passthrough_state_publisher"]
+
+    controller_params = ctx.config("linear_feedback_controller_params")
+    if '/' not in controller_params:  # a file in the default config dir
+            controller_params = path_join(
+                "config", "kuka", controller_params)
 
     return [IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -39,13 +47,18 @@ def generate_args():
     return [
         DeclareLaunchArgument(
             "linear_feedback_controller_params",
-            default_value=path_join(
-                "config", "kuka",
+            default_value=
                 PythonExpression(
                     ['"', LaunchConfiguration("robot_name"),
-                     '_linear_feedback_controller_params.yaml"'])),
+                     '_linear_feedback_controller_params.yaml"']),
             description="Path to the yaml file use to define "
                         + "Linear Feedback Controller's and Joint State Estimator's params.",
+        ),
+        DeclareLaunchArgument(
+            "use_passthrough_state_publisher",
+            default_value="false",
+            description="Whether to use passthrough_state_publisher chained controller.",
+            choices=["true", "false"],
         ),
     ]
 
