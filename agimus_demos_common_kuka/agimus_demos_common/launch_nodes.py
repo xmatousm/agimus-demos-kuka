@@ -34,7 +34,7 @@ def environment_publisher(robot_name: str,
 
 def trajectory_goal_server(robot_name: str) -> Node:
     return Node(
-        package="agimus_demos_common",
+        package="agimus_controller_mod_ros",
         executable="trajectory_goal_server",
         parameters=[get_use_sim_time()],
         output="screen",

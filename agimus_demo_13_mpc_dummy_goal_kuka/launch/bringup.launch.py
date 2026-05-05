@@ -54,7 +54,7 @@ def launch_setup(
         "config", "trajectory_config_file")
 
     simple_trajectory_goal_publisher_node = Node(
-        package="agimus_demos_common",
+        package="agimus_controller_mod_ros",
         executable="simple_trajectory_goal_publisher",
         parameters=[get_use_sim_time(), trajectory_weights_yaml],
         output="screen",
@@ -93,7 +93,6 @@ def launch_setup(
             )
         ),
         required_node(trajectory_goal_server_node)[1],
-
     ]
 
 

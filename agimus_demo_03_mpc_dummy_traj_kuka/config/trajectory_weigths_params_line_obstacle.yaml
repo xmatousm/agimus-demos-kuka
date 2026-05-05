@@ -3,7 +3,7 @@
   ros__parameters:
     ee_frame_name: lbr_link_tool
 
-    trajectory_name: line_cartesian_space
+    trajectory_name: line_cartesian_space:LineCartesianSpace
     w_q: [0.1, 1.0, 0.1, 1.0, 0.1, 0.1, 0.1]
     w_qdot: [0.1]
     w_qddot: [0.000001]

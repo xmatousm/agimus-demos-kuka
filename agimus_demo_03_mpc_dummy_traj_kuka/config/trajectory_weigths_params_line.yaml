@@ -3,12 +3,13 @@
   ros__parameters:
     ee_frame_name: lbr_link_tool
 
-    trajectory_name: line_cartesian_space
+    trajectory_name: line_cartesian_space:LineCartesianSpace
     w_q: [ 2.0 ]
     w_qdot: [ 0.5 ]
     w_qddot: [ 0.000001 ]
     w_robot_effort: [ 0.0008 ]
     w_pose: [ 200.0 ]
+    max_delay: 4
     line_endpoints:
       rotation: [ 0.0, 3.1415, 0.0 ]
 

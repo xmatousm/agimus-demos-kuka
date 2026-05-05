@@ -57,8 +57,8 @@ def launch_setup(
 
     if use_mod_publisher:
         simple_trajectory_publisher_node = Node(
-            package="agimus_demos_common",
-            executable="simple_trajectory_publisher_mod",
+            package="agimus_controller_mod_ros",
+            executable="simple_trajectory_publisher",
             parameters=[get_use_sim_time(), trajectory_weights_yaml],
             output="screen",
             namespace=robot_name,
