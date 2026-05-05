@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, \
@@ -33,15 +34,55 @@ class SetupContext:
     def config_bool(self, name: str) -> bool:
         return LaunchConfiguration(name).perform(self.context).lower() == "true"
 
-    def config_path(self, *items: str, pkg: Optional[str] = None
-                    ) -> Substitution:
+    def config_path(self, *items: str, pkg: Optional[str] = None,
+                    allow_empty: bool = False,
+                    check: Optional[str] = 'file',
+                    ) -> Optional[Substitution]:
+        """Create a path to a package share.
+
+        The package name can be given as a keyword argument 'pkg', it
+        defaults to this package.
+
+        The last item of *items (can be the only one) is the name of the launch
+        argument that is resolved. If there is a single item only, it is split
+        to optional package name (overrides the 'pkg') and a list of path items
+        given as 'pkg:path/to/file' or 'path/to/file'.
+
+        The list of items is then joined with the package share path.
+
+        When allow_empty is True and the last item (after resolving) is empty,
+        None is returned.
+        """
+
         if pkg is None:
             pkg = self.pkg
 
-        return path_join(
-            *items[:-1],
-            LaunchConfiguration(items[-1]).perform(self.context),
-            pkg=pkg)
+        items = list(items)  # copy to avoid modifying the original list
+        name = items[-1]
+        items[-1] = LaunchConfiguration(name).perform(self.context)
+
+        if items[-1] == "":
+            if allow_empty:
+                return None
+            else:
+                raise RuntimeError(f"Empty value of LaunchConfiguration {name}")
+
+        if len(items) == 1:
+            # try to split the item into an optional package name and a path
+            if ":" in items[0]:
+                pkg, items[0] = items[0].split(":", 1)
+
+            items = items[0].split("/")
+
+        pth_subst = path_join(*items, pkg=pkg)
+        if check == 'file':
+            pth = pth_subst.perform(self.context)
+            # check for file existence
+            if not os.path.isfile(pth):
+                raise RuntimeError(f"LaunchConfiguration '{name}': path does " +
+                                   f"not exist ({pth})")
+
+        return pth_subst
 
 
 def generate_default_kuka_args() -> list[DeclareLaunchArgument]:
@@ -292,7 +333,8 @@ def required_node(node: Node) -> tuple[Node, RegisterEventHandler]:
         event_handler=OnProcessExit(
             target_action=node,
             on_exit=[
-                LogError(msg=f"Required node exited: {node.node_package}/{node.node_executable}"),
+                LogError(
+                    msg=f"Required node exited: {node.node_package}/{node.node_executable}"),
                 EmitEvent(event=Shutdown())]))
 
     return node, handler
