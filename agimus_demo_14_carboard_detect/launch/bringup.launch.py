@@ -26,11 +26,9 @@ def launch_setup(
     camera_embedded = ctx.config_bool("camera_embedded")
     cardboard_yaml = path_join("config", "cardboard.yaml", pkg=PKG)
     calib_file = path_join("config", "calib_cam.yaml", pkg=PKG)
-    template_file = path_join("config", "template.png", pkg=PKG)
-    if ctx.config_bool("simulate"):
-        sample_file = path_join("config", "image.png", pkg=PKG)
-    else:
-        sample_file = None
+
+    template_file = ctx.config_path("template")
+    sample_file = ctx.config_path("simulate", allow_empty=True)
 
     launch = []
 
@@ -39,13 +37,12 @@ def launch_setup(
             cardboard_yaml, calib_file, sample_file, debug=True)
 
         launch += [*required_node(camera_node)]
-
-        calib_file = None
         sample_file = None
 
     detector_node = nodes.detector(
         cardboard_yaml, template_file,
-        calib_file=calib_file, simulate_file=sample_file, debug=True)
+        calib_file=calib_file, simulate_file=sample_file, debug=True,
+        camera_embedded=camera_embedded)
 
     launch += [*required_node(detector_node)]
 
@@ -62,10 +59,15 @@ def generate_args():
 
         DeclareLaunchArgument(
             "simulate",
-            default_value="false",
-            description="Whether to simulate a camera image.",
+            default_value="",
+            description="Image file to simulate a camera.",
         ),
 
+        DeclareLaunchArgument(
+            "template",
+            default_value="agimus_cardboard:templates/template_1.yml",
+            description="Template for detector.",
+        ),
     ]
 
 def generate_launch_description():

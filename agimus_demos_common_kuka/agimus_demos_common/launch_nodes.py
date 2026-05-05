@@ -6,14 +6,8 @@ from launch.substitution import Substitution
 from launch_ros.parameter_descriptions import ParameterValue
 
 from agimus_demos_common.launch_utils_kuka import (
-    generate_default_kuka_args,
     get_use_sim_time,
-    parameter_value_xacro,
-    include_path_join,
-    wait_for_non_zero_joints_run,
     remap_to_ns,
-    required_node,
-    SetupContext,
 )
 
 from agimus_demos_common.mpc_debugger_node import mpc_debugger_node
@@ -112,20 +106,21 @@ def camera(cardboard_yaml: Substitution, calib_file: Substitution,
 
 def detector(cardboard_yaml: Substitution,
              template_file: Substitution,
+             calib_file: Substitution,
              robot_calib_file: Optional[Substitution] = None,
-             calib_file: Optional[Substitution] = None,
              simulate_file: Optional[Substitution] = None,
-             debug: bool = False
+             camera_embedded: bool = False,
+             debug: bool = False,
              ) -> Node:
     return Node(
         package="agimus_cardboard",
         executable="detector",
         parameters=[get_use_sim_time(), cardboard_yaml],
         arguments=["--template-file", template_file] +
+                  ["--calib-file", calib_file] +
+                  (["--camera-embedded"] if camera_embedded else []) +
                   (["--robot-calib-file", robot_calib_file]
                    if robot_calib_file is not None else []) +
-                  (["--calib-file", calib_file]
-                   if calib_file is not None else []) +
                   (["--simulate-file", simulate_file]
                    if simulate_file is not None else []) +
                   (["--ros-args", "--log-level", "detector:=debug"]

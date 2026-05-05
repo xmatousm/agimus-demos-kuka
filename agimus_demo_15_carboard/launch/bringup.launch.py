@@ -89,24 +89,22 @@ def launch_setup(
     cardboard_yaml = path_join("config", "cardboard.yaml", pkg=PKG)
     calib_file = path_join("config", "calib_cam.yaml", pkg=PKG)
     robot_calib_file = path_join("config", "calib_robot.yaml", pkg=PKG)
-    template_file = path_join("config", "template.png", pkg=PKG)
+    template_file = ctx.config_path("template")
+    sample_file = ctx.config_path("simulate", allow_empty=True)
     hole_planner_yaml = path_join("config", "hole_planner.yaml", pkg=PKG)
-    if ctx.config_bool("simulate"):
-        sample_file = path_join("config", "image.png", pkg=PKG)
-    else:
-        sample_file = None
 
     if not camera_embedded:
         camera_node = nodes.camera(cardboard_yaml, calib_file, sample_file)
 
         launch += [*required_node(camera_node)]
-
-        calib_file = None
         sample_file = None
 
     detector_node = nodes.detector(
-        cardboard_yaml, template_file, robot_calib_file,
-        calib_file=calib_file, simulate_file=sample_file)
+        cardboard_yaml, template_file,
+        calib_file=calib_file,
+        robot_calib_file=robot_calib_file,
+        simulate_file=sample_file,
+        camera_embedded=camera_embedded)
 
     launch += [*required_node(detector_node)]
 
@@ -117,8 +115,8 @@ def launch_setup(
         output="screen",
         namespace=robot_name,
         remappings=[(f"/{robot_name}/hole_needed", "/hole_needed")],
-        arguments=["--ros-args", "--log-level", f"{robot_name}.hole_planner:=debug"],
-
+        arguments=["--ros-args", "--log-level",
+                   f"{robot_name}.hole_planner:=debug"],
     )
 
     launch += [*required_node(planner)]
@@ -136,8 +134,14 @@ def generate_args():
 
         DeclareLaunchArgument(
             "simulate",
-            default_value="false",
-            description="Whether to simulate a camera image.",
+            default_value="",
+            description="Image file to simulate a camera.",
+        ),
+
+        DeclareLaunchArgument(
+            "template",
+            default_value="agimus_cardboard:templates/template_1.yml",
+            description="Template for detector.",
         ),
     ]
 
