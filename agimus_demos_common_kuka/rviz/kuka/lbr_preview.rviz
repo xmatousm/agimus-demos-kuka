@@ -208,6 +208,45 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /lbr/mpc_current_reference_markers_pose
       Value: true
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: Holes
+      Namespaces:
+        holes: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /hole_marker
+      Value: true
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: Holes needed
+      Namespaces:
+        holes_needed: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /hole_needed_marker
+      Value: true
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: Working area
+      Namespaces:
+        working_area: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /lbr/working_area_marker
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
