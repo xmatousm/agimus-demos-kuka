@@ -1,7 +1,6 @@
 from launch import LaunchContext, LaunchDescription
 from launch.actions import (
     OpaqueFunction,
-    DeclareLaunchArgument,
     RegisterEventHandler,
     TimerAction,
 )
@@ -13,6 +12,7 @@ from launch_ros.actions import Node
 import agimus_demos_common.launch_nodes as nodes
 from agimus_demos_common.launch_utils_kuka import (
     generate_default_kuka_args,
+    generate_cardboard_detector_camera_args,
     generate_mpc_args,
     get_use_sim_time,
     path_join,
@@ -86,24 +86,25 @@ def launch_setup(
 
     # prepare the camera and the detector
     camera_embedded = ctx.config_bool("camera_embedded")
-    cardboard_yaml = path_join("config", "cardboard.yaml", pkg=PKG)
-    calib_file = path_join("config", "calib_cam.yaml", pkg=PKG)
-    robot_calib_file = path_join("config", "calib_robot.yaml", pkg=PKG)
+    detector_file = ctx.config_path("detector")
+    calib_file = ctx.config_path("calib_cam")
+    robot_calib_file = ctx.config_path("calib_robot")
     template_file = ctx.config_path("template")
     sample_file = ctx.config_path("simulate", allow_empty=True)
     hole_planner_yaml = path_join("config", "hole_planner.yaml", pkg=PKG)
 
     if not camera_embedded:
-        camera_node = nodes.camera(cardboard_yaml, calib_file, sample_file)
+        camera_node = nodes.camera(detector_file, calib_file, sample_file)
 
         launch += [*required_node(camera_node)]
         sample_file = None
 
     detector_node = nodes.detector(
-        cardboard_yaml, template_file,
+        detector_file, template_file,
         calib_file=calib_file,
-        robot_calib_file=robot_calib_file,
         simulate_file=sample_file,
+        debug=True,
+        robot_calib_file=robot_calib_file,
         camera_embedded=camera_embedded)
 
     launch += [*required_node(detector_node)]
@@ -124,32 +125,10 @@ def launch_setup(
     return launch
 
 
-def generate_args():
-    return [
-        DeclareLaunchArgument(
-            "camera_embedded",
-            default_value="false",
-            description="Camera is embedded with detector node or not.",
-        ),
-
-        DeclareLaunchArgument(
-            "simulate",
-            default_value="",
-            description="Image file to simulate a camera.",
-        ),
-
-        DeclareLaunchArgument(
-            "template",
-            default_value="agimus_cardboard:templates/template_1.yml",
-            description="Template for detector.",
-        ),
-    ]
-
-
 def generate_launch_description():
     return LaunchDescription(
-        generate_args()
+        generate_default_kuka_args()
+        + generate_cardboard_detector_camera_args()
         + generate_mpc_args()
-        + generate_default_kuka_args()
         + [OpaqueFunction(function=launch_setup)]
     )

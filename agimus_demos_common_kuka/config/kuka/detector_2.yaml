@@ -8,15 +8,19 @@
       publish_plane: true
       period: 0.5
       packet_size: 1500
-/**/detector:
+
+/**/detector_camera:
   ros__parameters:
-    detector:
-      publish_debug: true
-      publish_debug_reduce: 4
     camera:
       serial: "22312466"
       exposure_time: 0.04
       publish_raw: false
       publish_plane: false
-      period: 0.0
+      period: 0.5
       packet_size: 1500
+
+/**/detector:
+  ros__parameters:
+    detector:
+      publish_debug: true
+      publish_debug_reduce: 4

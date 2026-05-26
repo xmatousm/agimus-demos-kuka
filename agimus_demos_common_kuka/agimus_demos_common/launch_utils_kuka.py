@@ -237,6 +237,41 @@ def generate_mpc_args():
         ),
     ]
 
+def generate_cardboard_detector_camera_args():
+    return [
+        DeclareLaunchArgument(
+            "detector",
+            description="Camera and detector options.",
+        ),
+
+        DeclareLaunchArgument(
+            "calib_cam",
+            description="Camera calibration file.",
+        ),
+
+        DeclareLaunchArgument(
+            "calib_robot",
+            description="Robot calibration file.",
+        ),
+
+        DeclareLaunchArgument(
+            "camera_embedded",
+            default_value="false",
+            description="Camera is embedded with detector node or not.",
+        ),
+
+        DeclareLaunchArgument(
+            "simulate",
+            default_value="",
+            description="Image file to simulate a camera.",
+        ),
+
+        DeclareLaunchArgument(
+            "template",
+            default_value="agimus_cardboard:templates/template_1.yml",
+            description="Template for detector.",
+        ),
+    ]
 
 def get_use_sim_time() -> dict[str, LaunchConfiguration]:
     """Helper function creating action setting param `use_sim_time`.
