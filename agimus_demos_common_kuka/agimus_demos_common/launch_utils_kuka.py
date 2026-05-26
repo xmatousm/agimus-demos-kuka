@@ -203,6 +203,12 @@ def generate_default_kuka_args() -> list[DeclareLaunchArgument]:
             ),
             description="Path to the yaml file use to define controller parameters.",
         ),
+
+        DeclareLaunchArgument(
+            "gripper_eth",
+            default_value="",
+            description="ETH address of the gripper controller (Quido).",
+        ),
     ]
 
 

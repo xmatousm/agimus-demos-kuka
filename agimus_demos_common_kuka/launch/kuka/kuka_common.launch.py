@@ -16,6 +16,8 @@ from controller_manager.launch_utils import (
     generate_controllers_spawner_launch_description,  # noqa: I001
 )
 
+from papouch_ros.launch_helpers import quido_node, schunk_gripper_node
+
 from agimus_demos_common.launch_utils_kuka import (
     generate_default_kuka_args,
     get_use_sim_time,
@@ -23,6 +25,7 @@ from agimus_demos_common.launch_utils_kuka import (
     path_join,
     include_path_join,
     SetupContext,
+    required_node,
 )
 
 import launch.logging
@@ -42,6 +45,7 @@ def launch_setup(
     use_aux_bool = ctx.config_bool("use_aux")
     on_aux_bool = ctx.config_bool("on_aux")
     robot_name_str = ctx.config("robot_name")
+    gripper_eth = ctx.config("gripper_eth")
 
     if on_aux_bool and use_aux_bool:
         raise RuntimeError(
@@ -226,6 +230,14 @@ def launch_setup(
                     executable="rviz2",
                     parameters=[get_use_sim_time()],
                     arguments=["--display-config", rviz_config_path])
+            ]
+
+        if gripper_eth != "":
+            launch_config += [
+                *required_node(
+                    quido_node(eth=gripper_eth,
+                               namespace=robot_name_str)),
+                * required_node(schunk_gripper_node(namespace=robot_name_str)),
             ]
 
     return launch_config
