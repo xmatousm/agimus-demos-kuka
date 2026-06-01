@@ -1,0 +1,27 @@
+---
+/**/hole_insert_planner:
+  ros__parameters:
+    delta_z: 0.05
+    init_pose: [0.4, 0.3, 0.3]
+    speed: 0.1
+    speed_hole: 0.05
+
+    ee_frame_name: "lbr_link_tool"
+
+    w_q: [2.0]
+    w_qdot: [0.5]
+    w_qddot: [0.000001]
+    w_robot_effort: [0.0008]
+    w_pose: [500.0]
+    w_pose_prepare: [1500.0]
+    w_pose_hole: [3000.0]
+
+    goal_tolerance: 0.05
+    goal_tolerance_boost: 5.0
+    goal_weight_boost: 3.0
+    goal_tolerance_prepare: 0.01
+
+    x_min: 0.45
+    x_max: 0.7
+    y_min: -0.3
+    y_max: 0.3
