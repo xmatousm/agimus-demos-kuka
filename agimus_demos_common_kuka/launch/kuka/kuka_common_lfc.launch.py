@@ -8,7 +8,7 @@ from launch.launch_description_entity import LaunchDescriptionEntity
 from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
-from agimus_demos_common.launch_utils_kuka import (
+from agimus_demos_common_kuka.launch_utils_kuka import (
     path_join,
     generate_default_kuka_args,
     SetupContext,
@@ -16,7 +16,7 @@ from agimus_demos_common.launch_utils_kuka import (
 
 
 def launch_setup(
-        context: LaunchContext, *args, **kwargs
+        context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
     controllers_names = [
         "linear_feedback_controller",

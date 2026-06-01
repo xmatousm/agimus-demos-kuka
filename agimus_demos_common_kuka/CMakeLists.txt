@@ -5,10 +5,9 @@ project(agimus_demos_common_kuka LANGUAGES CXX)
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
-# Note: we are merging modules into agimus_demos_common package
-ament_python_install_package(agimus_demos_common SCRIPTS_DESTINATION
-                             lib/agimus_demos_common)
+ament_python_install_package(agimus_demos_common_kuka SCRIPTS_DESTINATION
+                             lib/agimus_demos_common_kuka)
 
-install(DIRECTORY config launch rviz DESTINATION share/agimus_demos_common)
+install(DIRECTORY config launch rviz DESTINATION share/agimus_demos_common_kuka)
 
 ament_auto_package()

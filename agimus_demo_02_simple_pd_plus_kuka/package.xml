@@ -4,7 +4,7 @@
   <name>agimus_demo_02_simple_pd_plus_kuka</name>
   <version>0.0.0</version>
   <description>
-    A simple Kuka demo with the LFC and an LFC client that implements a PD+ with Ricatti gains.
+    A simple Kuka demo with the LFC, and an LFC client that implements a PD+ with Ricatti gains.
   </description>
   <maintainer email="martin.matousek@cvut.cz">Martin Matousek</maintainer>
   <author>Martin Matousek</author>

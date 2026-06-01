@@ -3,7 +3,7 @@ from launch.actions import OpaqueFunction
 from launch.launch_description_entity import LaunchDescriptionEntity
 from launch_ros.actions import Node
 
-from agimus_demos_common.launch_utils_kuka import (
+from agimus_demos_common_kuka.launch_utils_kuka import (
     generate_default_kuka_args,
     get_use_sim_time,
     path_join,
@@ -16,7 +16,7 @@ PKG = "agimus_demo_02_simple_pd_plus_kuka"
 
 
 def launch_setup(
-        context: LaunchContext, *args, **kwargs
+        context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
     ctx = SetupContext(context, PKG)
 

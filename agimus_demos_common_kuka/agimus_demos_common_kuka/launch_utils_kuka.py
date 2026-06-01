@@ -12,19 +12,19 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.event_handlers import OnProcessExit
 from launch import LaunchDescriptionEntity, LaunchContext
-from agimus_demos_common.log_error import LogError
+from agimus_demos_common_kuka.log_error import LogError
+
+_PKG = __name__.split('.')[-2]
 
 
-def path_join(*items: str | Substitution,
-              pkg: str = "agimus_demos_common") -> Substitution:
+def path_join(*items: str | Substitution, pkg: str = _PKG) -> Substitution:
     """Join items into a path to a package share."""
     return PathJoinSubstitution(
         [FindPackageShare(pkg), *items])
 
 
 class SetupContext:
-    def __init__(self, context: LaunchContext,
-                 pkg: str = "agimus_demos_common"):
+    def __init__(self, context: LaunchContext, pkg: str = _PKG):
         self.context = context
         self.pkg = pkg
 
@@ -35,9 +35,8 @@ class SetupContext:
         return LaunchConfiguration(name).perform(self.context).lower() == "true"
 
     def config_path(self, *items: str, pkg: Optional[str] = None,
-                    allow_empty: bool = False,
                     check: Optional[str] = 'file',
-                    ) -> Optional[Substitution]:
+                    ) -> Substitution:
         """Create a path to a package share.
 
         The package name can be given as a keyword argument 'pkg', it
@@ -62,10 +61,7 @@ class SetupContext:
         items[-1] = LaunchConfiguration(name).perform(self.context)
 
         if items[-1] == "":
-            if allow_empty:
-                return None
-            else:
-                raise RuntimeError(f"Empty value of LaunchConfiguration {name}")
+            raise RuntimeError(f"Empty value of LaunchConfiguration {name}")
 
         if len(items) == 1:
             # try to split the item into an optional package name and a path
@@ -83,6 +79,20 @@ class SetupContext:
                                    f"not exist ({pth})")
 
         return pth_subst
+
+    def config_path_optional(self, *items: str, pkg: Optional[str] = None,
+                             check: Optional[str] = 'file',
+                             ) -> Optional[Substitution]:
+        """Create a path to a package share.
+
+        Same as config_path, but allows the last item (after resolving) to be
+        empty. If this is the case, None is returned.
+        """
+
+        if LaunchConfiguration(items[-1]).perform(self.context) == "":
+            return None
+        else:
+            return self.config_path(*items, pkg=pkg, check=check)
 
 
 def generate_default_kuka_args() -> list[DeclareLaunchArgument]:
@@ -148,14 +158,7 @@ def generate_default_kuka_args() -> list[DeclareLaunchArgument]:
         ),
         DeclareLaunchArgument(
             "joint_limits_config_path",
-            default_value=PathJoinSubstitution(
-                [
-                    FindPackageShare("agimus_demos_common"),
-                    "config",
-                    "kuka",
-                    "joint_limits.yaml",
-                ]
-            ),
+            default_value=path_join("config", "kuka", "joint_limits.yaml"),
             description="Path to joint limits YAML file",
         ),
         DeclareLaunchArgument(
@@ -166,15 +169,11 @@ def generate_default_kuka_args() -> list[DeclareLaunchArgument]:
         ),
         DeclareLaunchArgument(
             "system_config_path",
-            default_value=PathJoinSubstitution(
-                [
-                    FindPackageShare("agimus_demos_common"),
-                    "config",
-                    "kuka",
-                    PythonExpression(
-                        ['"', LaunchConfiguration("robot_name"),
-                         '_system_config.yaml"']),
-                ]
+            default_value=path_join(
+                "config", "kuka",
+                PythonExpression(
+                    ['"', LaunchConfiguration("robot_name"),
+                     '_system_config.yaml"']),
             ),
             description="Path to LBR system config YAML file",
         ),
@@ -193,14 +192,7 @@ def generate_default_kuka_args() -> list[DeclareLaunchArgument]:
         ),
         DeclareLaunchArgument(
             "kuka_controllers_params",
-            default_value=PathJoinSubstitution(
-                [
-                    FindPackageShare("agimus_demos_common"),
-                    "config",
-                    "kuka",
-                    "controllers.yaml",
-                ]
-            ),
+            default_value=path_join("config", "kuka", "controllers.yaml"),
             description="Path to the yaml file use to define controller parameters.",
         ),
 
@@ -237,6 +229,7 @@ def generate_mpc_args():
         ),
     ]
 
+
 def generate_cardboard_detector_camera_args():
     return [
         DeclareLaunchArgument(
@@ -267,11 +260,18 @@ def generate_cardboard_detector_camera_args():
         ),
 
         DeclareLaunchArgument(
+            "mask",
+            default_value="",
+            description="Image mask file.",
+        ),
+
+        DeclareLaunchArgument(
             "template",
             default_value="agimus_cardboard:templates/template_1.yml",
             description="Template for detector.",
         ),
     ]
+
 
 def get_use_sim_time() -> dict[str, LaunchConfiguration]:
     """Helper function creating action setting param `use_sim_time`.
@@ -309,7 +309,7 @@ def parameter_value_xacro(
     )
 
 
-def include_path_join(*items: str, pkg: str = "agimus_demos_common",
+def include_path_join(*items: str, pkg: str = _PKG,
                       launch_arguments=None) -> IncludeLaunchDescription:
     """Join items into a path to a package share and include as launch description ."""
 

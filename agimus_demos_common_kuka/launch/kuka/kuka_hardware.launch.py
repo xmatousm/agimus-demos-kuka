@@ -12,7 +12,7 @@ from launch_ros.actions import Node
 
 
 def launch_setup(
-        context: LaunchContext, *args, **kwargs
+        context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
     kuka_controllers_params = LaunchConfiguration("kuka_controllers_params")
     robot_name_str = LaunchConfiguration("robot_name").perform(context)

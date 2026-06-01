@@ -10,19 +10,18 @@ from launch.event_handlers import OnProcessStart
 from launch.launch_description_entity import LaunchDescriptionEntity
 from launch_ros.actions import Node
 
-from agimus_demos_common.launch_utils_kuka import (
+from agimus_demos_common_kuka.launch_utils_kuka import (
     generate_default_kuka_args,
     generate_mpc_args,
     get_use_sim_time,
     parameter_value_xacro,
     include_path_join,
-    wait_for_non_zero_joints_run,
     remap_to_ns,
     required_node,
     SetupContext,
 )
 
-import agimus_demos_common.launch_nodes as nodes
+import agimus_demos_common_kuka.launch_nodes as nodes
 
 from agimus_demos_common.static_transform_publisher_node import (
     static_transform_publisher_node,
@@ -32,7 +31,7 @@ PKG = "agimus_demo_03_mpc_dummy_traj_kuka"
 
 
 def launch_setup(
-        context: LaunchContext, *args, **kwargs
+        context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
     ctx = SetupContext(context, PKG)
 

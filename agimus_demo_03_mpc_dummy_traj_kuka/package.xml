@@ -3,8 +3,8 @@
 <package format="3">
   <name>agimus_demo_03_mpc_dummy_traj_kuka</name>
   <version>0.0.0</version>
-  <description> agimus_demo_03_mpc_dummy_traj contains the entry points for a simple Panda demo with
-    LFC and a MPC sending commands while following a dummy trajectory. </description>
+  <description>A simple demo with LFC and MPC sending commands while following
+      a dummy trajectory.</description>
   <maintainer email="guilhem.saurel@laas.fr">Guilhem Saurel</maintainer>
   <author email="maximilien.naveau@gmail.com">Maximilien Naveau</author>
 

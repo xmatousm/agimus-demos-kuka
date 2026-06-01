@@ -3,13 +3,16 @@ from launch.actions import OpaqueFunction, DeclareLaunchArgument
 from launch.launch_description_entity import LaunchDescriptionEntity
 from launch.substitutions import LaunchConfiguration
 
-from agimus_demos_common.launch_utils_kuka import path_join, include_path_join
+from agimus_demos_common_kuka.launch_utils_kuka import (
+    path_join,
+    include_path_join,
+)
 
 PKG = "agimus_demo_00_kuka_controller"
 
 
 def launch_setup(
-        context: LaunchContext, *args, **kwargs
+        context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
     preset = LaunchConfiguration("preset").perform(context)
 

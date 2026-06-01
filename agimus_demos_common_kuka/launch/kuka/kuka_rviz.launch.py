@@ -8,13 +8,13 @@ from launch.substitutions import (
 )
 from launch_ros.actions import Node
 
-from agimus_demos_common.launch_utils_kuka import (
+from agimus_demos_common_kuka.launch_utils_kuka import (
     generate_default_kuka_args,
     get_use_sim_time,
 )
 
 def launch_setup(
-        context: LaunchContext, *args, **kwargs
+        context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
     robot_name_str = LaunchConfiguration("robot_name").perform(context)
 

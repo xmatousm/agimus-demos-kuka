@@ -18,7 +18,7 @@ from controller_manager.launch_utils import (
 
 from papouch_ros.launch_helpers import quido_node, schunk_gripper_node
 
-from agimus_demos_common.launch_utils_kuka import (
+from agimus_demos_common_kuka.launch_utils_kuka import (
     generate_default_kuka_args,
     get_use_sim_time,
     parameter_value_xacro,
@@ -32,7 +32,7 @@ import launch.logging
 
 
 def launch_setup(
-        context: LaunchContext, *args, **kwargs
+        context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
     ctx = SetupContext(context)
 

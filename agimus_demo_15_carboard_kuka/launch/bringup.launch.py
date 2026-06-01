@@ -9,8 +9,8 @@ from launch.event_handlers import OnProcessStart
 from launch.launch_description_entity import LaunchDescriptionEntity
 from launch_ros.actions import Node
 
-import agimus_demos_common.launch_nodes as nodes
-from agimus_demos_common.launch_utils_kuka import (
+import agimus_demos_common_kuka.launch_nodes as nodes
+from agimus_demos_common_kuka.launch_utils_kuka import (
     generate_default_kuka_args,
     generate_cardboard_detector_camera_args,
     generate_mpc_args,
@@ -19,7 +19,6 @@ from agimus_demos_common.launch_utils_kuka import (
     include_path_join,
     required_node,
     parameter_value_xacro,
-    wait_for_non_zero_joints_run,
     SetupContext,
 )
 
@@ -27,11 +26,11 @@ from agimus_demos_common.static_transform_publisher_node import (
     static_transform_publisher_node,
 )
 
-PKG = "agimus_demo_15_cardboard"
+PKG = "agimus_demo_15_cardboard_kuka"
 
 
 def launch_setup(
-        context: LaunchContext, *args, **kwargs
+        context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
     ctx = SetupContext(context, PKG)
 
@@ -90,19 +89,23 @@ def launch_setup(
     calib_file = ctx.config_path("calib_cam")
     robot_calib_file = ctx.config_path("calib_robot")
     template_file = ctx.config_path("template")
-    sample_file = ctx.config_path("simulate", allow_empty=True)
+    sample_file = ctx.config_path_optional("simulate")
     hole_planner_yaml = path_join("config", "hole_planner.yaml", pkg=PKG)
+    mask_file = ctx.config_path_optional("mask")
 
     if not camera_embedded:
-        camera_node = nodes.camera(detector_file, calib_file, sample_file)
+        camera_node = nodes.camera(
+            detector_file, calib_file, sample_file, mask_file)
 
         launch += [*required_node(camera_node)]
         sample_file = None
+        mask_file = None
 
     detector_node = nodes.detector(
         detector_file, template_file,
         calib_file=calib_file,
         simulate_file=sample_file,
+        mask_file=mask_file,
         debug=True,
         robot_calib_file=robot_calib_file,
         camera_embedded=camera_embedded)

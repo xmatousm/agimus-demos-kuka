@@ -2,21 +2,20 @@ from launch import LaunchContext, LaunchDescription
 from launch.actions import OpaqueFunction, RegisterEventHandler
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_entity import LaunchDescriptionEntity
-from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 from controller_manager.launch_utils import (
     generate_controllers_spawner_launch_description,
 )
 
-from agimus_demos_common.launch_utils_kuka import (
+from agimus_demos_common_kuka.launch_utils_kuka import (
     path_join,
     include_path_join,
     SetupContext,
 )
 
 def launch_setup(
-    context: LaunchContext, *args, **kwargs
+    context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
     ctx = SetupContext(context)
 
