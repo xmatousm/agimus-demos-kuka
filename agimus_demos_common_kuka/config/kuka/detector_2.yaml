@@ -3,7 +3,8 @@
   ros__parameters:
     camera:
       serial: "22312466"
-      exposure_time: 0.04
+      exposure_time: 0.06
+      gain: 0.0
       publish_raw: false
       publish_plane: true
       period: 0.5
@@ -13,7 +14,8 @@
   ros__parameters:
     camera:
       serial: "22312466"
-      exposure_time: 0.04
+      exposure_time: 0.06
+      gain: 0.0
       publish_raw: false
       publish_plane: false
       period: 0.5
