@@ -21,8 +21,7 @@ def launch_setup(
     else:
         controller_names = ["effort_example_controller_" + preset]
 
-    controller_params = path_join(
-        "config", "effort_example_controller.yaml", pkg=PKG)
+    controller_params = f"{PKG}:/config/effort_example_controller.yaml"
 
     return [include_path_join(
         "launch", "kuka", "kuka_common.launch.py",

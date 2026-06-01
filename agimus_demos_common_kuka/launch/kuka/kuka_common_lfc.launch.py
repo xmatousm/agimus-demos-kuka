@@ -28,9 +28,6 @@ def launch_setup(
         controllers_names += ["effort_passthrough_state_publisher"]
 
     controller_params = ctx.config("linear_feedback_controller_params")
-    if '/' not in controller_params:  # a file in the default config dir
-            controller_params = path_join(
-                "config", "kuka", controller_params)
 
     return [IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -49,7 +46,7 @@ def generate_args():
             "linear_feedback_controller_params",
             default_value=
                 PythonExpression(
-                    ['"', LaunchConfiguration("robot_name"),
+                    ['"config/kuka/', LaunchConfiguration("robot_name"),
                      '_linear_feedback_controller_params.yaml"']),
             description="Path to the yaml file use to define "
                         + "Linear Feedback Controller's and Joint State Estimator's params.",

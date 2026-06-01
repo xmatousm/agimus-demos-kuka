@@ -21,7 +21,8 @@ def launch_setup(
 
     gz_verbose_bool = ctx.config_bool("gz_verbose")
     gz_headless_bool = ctx.config_bool("gz_headless")
-    gz_gui_config_path_str = path_join("config", "gz_gui.config").perform(context)
+    gz_gui_config_path_str = path_join(
+        "config", "gz_gui.config", pkg="agimus_demos_common").perform(context)
     robot_name_str = ctx.config("robot_name")
 
     world = path_join("config", "kuka", "gazebo_empty_world.sdf").perform(context)
@@ -43,7 +44,8 @@ def launch_setup(
             {
                 "expand_gz_topic_names": True,
                 "use_sim_time": True,
-                "config_file": path_join("config", "gz_bridge.yaml")
+                "config_file": path_join("config", "gz_bridge.yaml",
+                                         pkg="agimus_demos_common")
             }
         ],
         output="screen",

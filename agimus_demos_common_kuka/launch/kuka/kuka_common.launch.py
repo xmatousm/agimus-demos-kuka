@@ -38,7 +38,7 @@ def launch_setup(
 
     arm_id = ctx.config("arm_id")
     tool_id = ctx.config("tool_id")
-    rviz_config_path = LaunchConfiguration("rviz_config_path")
+    rviz_config_path = ctx.config_path("rviz_config_path")
 
     use_rviz_bool = ctx.config_bool("use_rviz")
     use_gazebo_bool = ctx.config_bool("use_gazebo")
@@ -52,7 +52,7 @@ def launch_setup(
             "Cannot use both use_aux and on_aux at the same time.")
 
     external_controllers_names = ctx.config("external_controllers_names")
-    external_controllers_params = ctx.config("external_controllers_params")
+    external_controllers_params = ctx.config_path("external_controllers_params")
 
     logger = launch.logging.get_logger(__name__)
 
@@ -127,9 +127,9 @@ def launch_setup(
             ]
 
     if not on_aux_bool:  # full launch or using aux launch
-        system_config_file = ctx.config("system_config_path")
-        joint_limits_file = ctx.config("joint_limits_config_path")
-        initial_joint_positions_file = ctx.config(
+        system_config_file = ctx.config_path("system_config_path")
+        joint_limits_file = ctx.config_path("joint_limits_config_path")
+        initial_joint_positions_file = ctx.config_path(
             "initial_joint_positions_path")
 
         xacro_args = {

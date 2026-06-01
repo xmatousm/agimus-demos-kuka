@@ -11,14 +11,16 @@ from launch_ros.actions import Node
 from agimus_demos_common_kuka.launch_utils_kuka import (
     generate_default_kuka_args,
     get_use_sim_time,
+    SetupContext,
 )
 
 def launch_setup(
         context: LaunchContext, *_args, **_kwargs
 ) -> list[LaunchDescriptionEntity]:
-    robot_name_str = LaunchConfiguration("robot_name").perform(context)
+    ctx = SetupContext(context)
 
-    rviz_config_path = LaunchConfiguration("rviz_config_path")
+    robot_name_str = ctx.config("robot_name")
+    rviz_config_path = ctx.config_path("rviz_config_path")
 
     rviz_node = Node(
         package="rviz2",

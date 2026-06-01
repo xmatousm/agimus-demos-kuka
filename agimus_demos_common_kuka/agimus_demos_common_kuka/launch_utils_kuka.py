@@ -149,32 +149,26 @@ def generate_default_kuka_args() -> list[DeclareLaunchArgument]:
         ),
         DeclareLaunchArgument(
             "rviz_config_path",
-            default_value=path_join(
-                "rviz", "kuka",
-                PythonExpression(
-                    ['"', LaunchConfiguration("robot_name"),
-                     '_preview.rviz"'])),
+            default_value=PythonExpression(
+                ['"rviz/kuka/', LaunchConfiguration("robot_name"),
+                 '_preview.rviz"']),
             description="Path to RViz configuration file",
         ),
         DeclareLaunchArgument(
             "joint_limits_config_path",
-            default_value=path_join("config", "kuka", "joint_limits.yaml"),
+            default_value="config/kuka/joint_limits.yaml",
             description="Path to joint limits YAML file",
         ),
         DeclareLaunchArgument(
             "initial_joint_positions_path",
-            default_value=path_join(
-                "config", "kuka", "initial_joint_positions.yaml"),
+            default_value="config/kuka/initial_joint_positions.yaml",
             description="Path to joint limits YAML file",
         ),
         DeclareLaunchArgument(
             "system_config_path",
-            default_value=path_join(
-                "config", "kuka",
-                PythonExpression(
-                    ['"', LaunchConfiguration("robot_name"),
-                     '_system_config.yaml"']),
-            ),
+            default_value=PythonExpression(
+                ['"config/kuka/', LaunchConfiguration("robot_name"),
+                 '_system_config.yaml"']),
             description="Path to LBR system config YAML file",
         ),
         DeclareLaunchArgument(
@@ -192,7 +186,7 @@ def generate_default_kuka_args() -> list[DeclareLaunchArgument]:
         ),
         DeclareLaunchArgument(
             "kuka_controllers_params",
-            default_value=path_join("config", "kuka", "controllers.yaml"),
+            default_value="config/kuka/controllers.yaml",
             description="Path to the yaml file use to define controller parameters.",
         ),
 
