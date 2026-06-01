@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!-- top level -->
+<robot name="iiwa7" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find papouch_description)/urdf/_materials.urdf.xacro" />
+    <xacro:include filename="$(find papouch_description)/urdf/schunk_gripper.xacro" />
+
+    <!-- include the lbr iiwa description -->
+    <xacro:include filename="$(find lbr_description)/urdf/iiwa7/iiwa7.xacro" />
+
+    <!-- include the definition of tools-->
+    <xacro:include filename="$(find agimus_description)/urdf/flange.xacro" />
+    <xacro:include filename="$(find agimus_description)/urdf/knife.xacro" />
+    <xacro:include filename="$(find papouch_description)/urdf/schunk_gripper.xacro" />
+
+    <!-- connect tools to the end-effector -->
+    <xacro:tool_flange parent="$(arg robot_name)_link_ee" name="$(arg robot_name)_flange"/>
+    <xacro:tool_flange parent="$(arg robot_name)_flange" name="$(arg robot_name)_flange_g"/>
+    <xacro:schunk_gripper parent="$(arg robot_name)_flange_g" name="$(arg robot_name)_gripper"/>
+
+    <!-- tcp - added 5cm finger length -->
+    <link name="$(arg robot_name)_link_tool">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+	            <sphere radius="0.001"/>
+            </geometry>
+            <material name="dummy"/>
+        </visual>
+    </link>
+
+    <joint name="$(arg robot_name)_joint_tool" type="fixed">
+        <parent link="$(arg robot_name)_gripper" />
+        <child link="$(arg robot_name)_link_tool" />
+        <origin xyz="0 0 0.05" rpy="0 0 0" />
+    </joint>
+</robot>
