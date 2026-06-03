@@ -1,0 +1,10 @@
+repositories:
+  vcs_agimus/agimus_cardboard:
+    type: git
+    url: https://github.com/xmatousm/agimus_cardboard.git
+    version: main
+
+  vcs_agimus/agimus_controller_mod:
+    type: git
+    url: https://github.com/xmatousm/agimus_controller_mod.git
+    version: main
