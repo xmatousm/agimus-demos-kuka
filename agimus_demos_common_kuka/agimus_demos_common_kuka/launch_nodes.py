@@ -114,6 +114,7 @@ def detector(cardboard_yaml: Substitution,
              simulate_file: Optional[Substitution] = None,
              mask_file: Optional[Substitution] = None,
              camera_embedded: bool = False,
+             detect_holder: bool = False,
              debug: bool = False,
              ) -> Node:
     return Node(
@@ -123,6 +124,7 @@ def detector(cardboard_yaml: Substitution,
         arguments=["--template-file", template_file] +
                   ["--calib-file", calib_file] +
                   (["--camera-embedded"] if camera_embedded else []) +
+                  (["--detect-holder"] if detect_holder else []) +
                   (["--robot-calib-file", robot_calib_file]
                    if robot_calib_file is not None else []) +
                   (["--simulate-file", simulate_file]

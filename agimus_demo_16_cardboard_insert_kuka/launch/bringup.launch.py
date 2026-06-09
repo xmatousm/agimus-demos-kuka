@@ -103,7 +103,9 @@ def launch_setup(
         calib_file=calib_file,
         robot_calib_file=robot_calib_file,
         simulate_file=sample_file,
-        camera_embedded=camera_embedded)
+        camera_embedded=camera_embedded,
+        detect_holder=True,
+        debug=False)
 
     launch += [*required_node(detector_node)]
 
@@ -113,9 +115,10 @@ def launch_setup(
         parameters=[get_use_sim_time(), hole_planner_yaml],
         output="screen",
         namespace=robot_name,
-        remappings=[(f"/{robot_name}/hole", "/hole")],
-        arguments=["--ros-args", "--log-level",
-                   f"{robot_name}.hole_planner:=debug"],
+        remappings=[(f"/{robot_name}/holder_part", "/holder_part"),
+                    (f"/{robot_name}/hole", "/hole")],
+        # arguments=["--ros-args", "--log-level",
+        #            f"{robot_name}.hole_insert_planner:=debug"],
     )
 
     launch += [*required_node(planner)]

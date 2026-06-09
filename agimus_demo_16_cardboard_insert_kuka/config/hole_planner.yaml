@@ -14,7 +14,7 @@
     w_robot_effort: [0.0008]
     w_pose: [500.0]
     w_pose_prepare: [1500.0]
-    w_pose_hole: [3000.0]
+    w_pose_hole: [1000.0]
 
     goal_tolerance: 0.05
     goal_tolerance_boost: 5.0
