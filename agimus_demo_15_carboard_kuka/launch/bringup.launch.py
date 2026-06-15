@@ -106,7 +106,7 @@ def launch_setup(
         calib_file=calib_file,
         simulate_file=sample_file,
         mask_file=mask_file,
-        debug=True,
+        debug=False,
         robot_calib_file=robot_calib_file,
         camera_embedded=camera_embedded)
 
@@ -118,7 +118,7 @@ def launch_setup(
         parameters=[get_use_sim_time(), hole_planner_yaml],
         output="screen",
         namespace=robot_name,
-        remappings=[(f"/{robot_name}/hole_needed", "/hole_needed")],
+        remappings=[(f"/{robot_name}/hole", "/hole")],
         arguments=["--ros-args", "--log-level",
                    f"{robot_name}.hole_planner:=debug"],
     )
