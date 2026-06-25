@@ -3,6 +3,7 @@
   ros__parameters:
     delta_z: 0.05
     init_pose: [0.4, 0.3, 0.3]
+    reg_q: [0.0, 0.6, 0.0, -1.05, 0.0, 1.45, 0.0]
     speed: 0.1
     speed_hole: 0.05
 
