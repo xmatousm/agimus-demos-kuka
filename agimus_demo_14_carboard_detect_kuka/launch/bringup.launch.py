@@ -44,6 +44,7 @@ def launch_setup(
         simulate_file=sample_file,
         mask_file=mask_file,
         debug=True,
+        detect_holder=True,
         robot_calib_file=robot_calib_file,
         camera_embedded=camera_embedded)
 
