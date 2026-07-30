@@ -7,6 +7,14 @@
     speed: 0.1
     speed_hole: 0.05
 
+    shake_part: 0.01
+    shake_duration_part: 0.5
+    dz_part: 0.01
+
+    shake_hole: 0.02
+    shake_duration_hole: 0.5
+    dz_hole: 0.01
+
     ee_frame_name: "lbr_link_tool"
 
     w_q: [2.0]
