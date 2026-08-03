@@ -51,7 +51,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /lbr/robot_description
+        Value: /robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -139,7 +139,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /lbr/environment_description
+        Value: /environment_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -232,7 +232,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /lbr/working_area_marker
+        Value: /working_area_marker
       Value: true
     - Class: rviz_default_plugins/MarkerArray
       Enabled: true

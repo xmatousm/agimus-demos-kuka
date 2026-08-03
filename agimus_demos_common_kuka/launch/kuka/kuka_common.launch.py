@@ -26,6 +26,7 @@ from agimus_demos_common_kuka.launch_utils_kuka import (
     include_path_join,
     SetupContext,
     required_node,
+    remap_to_ns,
 )
 
 import launch.logging
@@ -157,6 +158,21 @@ def launch_setup(
         robot_description_with_collision = parameter_value_xacro(
             robot_description_file_substitution, xacro_collision_args)
 
+        # Separate publisher for a single hand in its namespace
+        # (global urdf can be more complicated, with more hands, etd);
+        # LFC has hardcoded the use of robot_state_publisher, then we remap
+        # inputs and outputs as they are not wanted
+        robot_urdf_publisher_node = Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            parameters=[get_use_sim_time(),
+                        {"robot_description": robot_description}],
+            remappings=[*remap_to_ns(robot_name_str, 'tf', 'tf_static'),
+                        ("joint_states", "unused_joint_states")],
+            output="screen",
+            namespace=robot_name_str,
+        )
+
         joint_state_publisher_node = Node(
             package="joint_state_publisher",
             executable="joint_state_publisher",
@@ -164,13 +180,12 @@ def launch_setup(
                 get_use_sim_time(),
                 {
                     "source_list": [
-                        "joint_states",
+                        f"{robot_name_str}/joint_states",
                         # f"{arm_id_str}_gripper/joint_states",
                     ],
                     "rate": 30,
                 },
             ],
-            namespace=robot_name_str,
         )
 
         robot_state_publisher_node = Node(
@@ -179,7 +194,6 @@ def launch_setup(
             parameters=[get_use_sim_time(),
                         {"robot_description": robot_description}],
             output="screen",
-            namespace=robot_name_str,
         )
 
         robot_collision_publisher_node = Node(
@@ -217,6 +231,7 @@ def launch_setup(
         )
 
         launch_config += [
+            robot_urdf_publisher_node,
             joint_state_publisher_node,
             robot_state_publisher_node,
             robot_collision_publisher_node,

@@ -114,11 +114,10 @@ def launch_setup(
         executable="hole_insert_planner",
         parameters=[get_use_sim_time(), hole_planner_yaml],
         output="screen",
-        namespace=robot_name,
-        remappings=[(f"/{robot_name}/holder_part", "/holder_part"),
-                    (f"/{robot_name}/hole", "/hole")],
-        # arguments=["--ros-args", "--log-level",
-        #            f"{robot_name}.hole_insert_planner:=debug"],
+        arguments=["--robot_name", robot_name,
+                   "--ros-args", "--log-level",
+                   "hole_insert_planner:=debug",
+                   ],
     )
 
     launch += [*required_node(planner)]
