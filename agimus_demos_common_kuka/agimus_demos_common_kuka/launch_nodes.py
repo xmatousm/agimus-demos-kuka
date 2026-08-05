@@ -108,7 +108,7 @@ def camera(cardboard_yaml: Substitution, calib_file: Substitution,
 
 
 def detector(cardboard_yaml: Substitution,
-             template_file: Substitution,
+             template_file: Optional[Substitution],
              calib_file: Substitution,
              robot_calib_file: Optional[Substitution] = None,
              simulate_file: Optional[Substitution] = None,
@@ -121,7 +121,8 @@ def detector(cardboard_yaml: Substitution,
         package="agimus_cardboard",
         executable="detector",
         parameters=[get_use_sim_time(), cardboard_yaml],
-        arguments=["--template-file", template_file] +
+        arguments=(["--template-file", template_file]
+                   if template_file is not None else []) +
                   ["--calib-file", calib_file] +
                   (["--camera-embedded"] if camera_embedded else []) +
                   (["--detect-holder"] if detect_holder else []) +

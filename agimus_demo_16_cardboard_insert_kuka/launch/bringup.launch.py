@@ -88,7 +88,13 @@ def launch_setup(
     detector_file = ctx.config_path("detector")
     calib_file = ctx.config_path("calib_cam")
     robot_calib_file = ctx.config_path("calib_robot")
-    template_file = ctx.config_path("template")
+    if ctx.config("template") == 'none':
+        template_file = None
+        mode = 'parts'
+    else:
+        template_file = ctx.config_path("template")
+        mode = 'full'
+
     sample_file = ctx.config_path_optional("simulate")
     hole_planner_yaml = path_join("config", "hole_planner.yaml", pkg=PKG)
 
@@ -115,8 +121,9 @@ def launch_setup(
         parameters=[get_use_sim_time(), hole_planner_yaml],
         output="screen",
         arguments=["--robot_name", robot_name,
-                   "--ros-args", "--log-level",
-                   "hole_insert_planner:=debug",
+                   "--mode", mode,
+                   #"--ros-args", "--log-level",
+                   #"hole_insert_planner:=debug",
                    ],
     )
 
