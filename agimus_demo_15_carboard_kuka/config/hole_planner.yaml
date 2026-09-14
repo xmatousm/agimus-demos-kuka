@@ -1,25 +1,38 @@
 ---
 /**/hole_planner:
   ros__parameters:
-    delta_z: 0.08
+    delta_z: 0.07
     init_pose: [0.4, 0.3, 0.3]
-    speed: 0.15
-    speed_hole: 0.05
+    reg_q: [ 0.0, 0.6, 0.0, -1.05, 0.0, 1.45, 0.0 ]
 
     ee_frame_name: "lbr_link_tool"
 
-    w_q: [2.0]
-    w_qdot: [0.5]
-    w_qddot: [0.000001]
-    w_robot_effort: [0.0008]
-    w_pose: [200.0]
-    w_pose_prepare: [1000.0]
-    w_pose_hole: [3000.0]
+    params_normal:
+      w_q: [2.0]
+      w_qdot: [0.5]
+      w_qddot: [0.000001]
+      w_robot_effort: [0.0008]
+      w_pose: [200.0]
+      speed: 0.3
+      goal_tolerance: 0.05
+      goal_tolerance_boost: 2.0
+      goal_weight_boost: 5.0
 
-    goal_tolerance: 0.05
-    goal_tolerance_boost: 2.0
-    goal_weight_boost: 5.0
-    goal_tolerance_prepare: 0.01
+    params_prepare:
+      w_pose: [1000.0]
+      goal_tolerance: 0.01
+      speed: 0.2
+
+    params_pre_hole:
+      w_pose: [300.0]
+      goal_tolerance: 0.0
+      speed: 0.15
+      duration: 0.3
+
+    params_hole:
+      w_pose: [3000.0]
+      speed: 0.05
+      goal_tolerance: 0.0
 
     saw_length: 0.02
     saw_height: 0.03
@@ -31,6 +44,3 @@
     x_max: 0.7
     y_min: -0.3
     y_max: 0.3
-
-
-#[0.6, 0.4, 0.0, -1.75, 0.0, 0.95, 0.0]

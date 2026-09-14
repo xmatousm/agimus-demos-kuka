@@ -1,34 +1,51 @@
 ---
 /**/hole_insert_planner:
   ros__parameters:
-    delta_z: 0.05
+    delta_z: 0.03
     init_pose: [0.4, 0.3, 0.3]
     reg_q: [0.0, 0.6, 0.0, -1.05, 0.0, 1.45, 0.0]
-    speed: 0.1
-    speed_hole: 0.05
 
     shake_part: 0.01
     shake_duration_part: 0.5
-    dz_part: 0.01
+    shake_part_threshold: 0.005
 
-    shake_hole: 0.02
+    dz_part: -0.01
+    push_part: 0.01
+
+    shake_hole: 0.01
     shake_duration_hole: 0.5
-    dz_hole: 0.01
+    dz_hole: 0.00
+    push_hole: 0.01
 
     ee_frame_name: "lbr_link_tool"
 
-    w_q: [2.0]
-    w_qdot: [0.5]
-    w_qddot: [0.000001]
-    w_robot_effort: [0.0008]
-    w_pose: [500.0]
-    w_pose_prepare: [1500.0]
-    w_pose_hole: [1000.0]
+    params_normal:
+      w_q: [2.0]
+      w_qdot: [0.5]
+      w_qddot: [0.000001]
+      w_robot_effort: [0.0008]
+      w_pose: [500.0]
+      speed: 0.4
+      goal_tolerance: 0.05
+      goal_tolerance_boost: 5.0
+      goal_weight_boost: 3.0
 
-    goal_tolerance: 0.05
-    goal_tolerance_boost: 5.0
-    goal_weight_boost: 3.0
-    goal_tolerance_prepare: 0.01
+    params_prepare:
+      w_pose: [2500.0]
+      goal_tolerance: 0.01
+      speed: 0.3
+
+    params_pre_hole:
+      w_pose: [300.0]
+      goal_tolerance: 0.0
+      speed: 0.15
+      duration: 0.3
+
+    params_hole:
+      w_pose: [1000.0]
+      speed: 0.1
+      goal_tolerance: 0.0
+
 
     x_min: 0.45
     x_max: 0.7
