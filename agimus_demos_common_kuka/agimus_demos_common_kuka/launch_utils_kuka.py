@@ -264,6 +264,13 @@ def generate_cardboard_detector_camera_args():
             default_value="agimus_cardboard:templates/template_1.yml",
             description="Template for detector.",
         ),
+
+        DeclareLaunchArgument(
+            "debug_cardboard",
+            default_value="false",
+            description="Print some debug messages.",
+            choices=["false", "true"],
+        ),
     ]
 
 

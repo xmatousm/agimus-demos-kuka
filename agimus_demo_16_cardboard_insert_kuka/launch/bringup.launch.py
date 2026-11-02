@@ -83,6 +83,8 @@ def launch_setup(
         required_node(trajectory_goal_server_node)[1],
     ]
 
+    debug_cardboard = ctx.config_bool("debug_cardboard")
+
     # prepare the camera and the detector
     camera_embedded = ctx.config_bool("camera_embedded")
     detector_file = ctx.config_path("detector")
@@ -99,7 +101,8 @@ def launch_setup(
     hole_planner_yaml = path_join("config", "hole_planner.yaml", pkg=PKG)
 
     if not camera_embedded:
-        camera_node = nodes.camera(detector_file, calib_file, sample_file)
+        camera_node = nodes.camera(detector_file, calib_file, sample_file,
+                                   debug=debug_cardboard)
 
         launch += [*required_node(camera_node)]
         sample_file = None
@@ -111,7 +114,7 @@ def launch_setup(
         simulate_file=sample_file,
         camera_embedded=camera_embedded,
         detect_holder=True,
-        debug=False)
+        debug=debug_cardboard)
 
     launch += [*required_node(detector_node)]
 
@@ -121,10 +124,10 @@ def launch_setup(
         parameters=[get_use_sim_time(), hole_planner_yaml],
         output="screen",
         arguments=["--robot_name", robot_name,
-                   "--mode", mode,
-                   #"--ros-args", "--log-level",
-                   #"hole_insert_planner:=debug",
-                   ],
+                   "--mode", mode] +
+                  (["--ros-args", "--log-level",
+                    "hole_insert_planner:=debug"]
+                   if debug_cardboard else []),
     )
 
     launch += [*required_node(planner)]
