@@ -14,8 +14,8 @@
   ros__parameters:
     camera:
       serial: "22535418"
-      exposure_time: 0.05
-      gain: 10.0
+      exposure_time: 0.07
+      gain: 20.0
       publish_raw: false
       publish_plane: true
       period: 0.5
