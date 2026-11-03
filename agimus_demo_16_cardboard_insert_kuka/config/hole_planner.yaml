@@ -9,6 +9,8 @@
     shake_duration_part: 0.5
     shake_part_threshold: 0.005
 
+    check_grab: false
+
     dz_part: -0.01
     push_part: 0.01
 
