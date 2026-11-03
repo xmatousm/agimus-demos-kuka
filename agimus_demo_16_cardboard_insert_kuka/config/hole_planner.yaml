@@ -16,7 +16,9 @@
 
     shake_hole: 0.01
     shake_duration_hole: 0.5
-    dz_hole: 0.00
+    shake_hole_threshold: 0.005
+
+    dz_hole: 0.002
     push_hole: 0.01
 
     ee_frame_name: "lbr_link_tool"
@@ -31,6 +33,7 @@
       goal_tolerance: 0.05
       goal_tolerance_boost: 5.0
       goal_weight_boost: 3.0
+      duration: 0.1
 
     params_prepare:
       w_pose: [2500.0]
