@@ -3,6 +3,7 @@ from launch.actions import (
     OpaqueFunction,
     RegisterEventHandler,
     TimerAction,
+    DeclareLaunchArgument,
 )
 
 from launch.event_handlers import OnProcessStart
@@ -90,6 +91,7 @@ def launch_setup(
     detector_file = ctx.config_path("detector")
     calib_file = ctx.config_path("calib_cam")
     robot_calib_file = ctx.config_path("calib_robot")
+    pose_client = ctx.config_bool("pose_client")
     if ctx.config("template") == 'none':
         template_file = None
         mode = 'parts'
@@ -113,7 +115,8 @@ def launch_setup(
         robot_calib_file=robot_calib_file,
         simulate_file=sample_file,
         camera_embedded=camera_embedded,
-        detect_holder=True,
+        detect_holder=not pose_client,
+        pose_client=pose_client,
         debug=debug_cardboard)
 
     launch += [*required_node(detector_node)]
@@ -134,11 +137,19 @@ def launch_setup(
 
     return launch
 
+def generate_launch_args():
+    return [
+        DeclareLaunchArgument(
+            "pose_client",
+            default_value="false",
+            description="Use pose client to detect parts.",
+        ) ]
 
 def generate_launch_description():
     return LaunchDescription(
         generate_default_kuka_args()
         + generate_cardboard_detector_camera_args()
         + generate_mpc_args()
+        + generate_launch_args()
         + [OpaqueFunction(function=launch_setup)]
     )
