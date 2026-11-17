@@ -1,6 +1,7 @@
 from launch import LaunchContext, LaunchDescription
 from launch.actions import OpaqueFunction
 from launch.launch_description_entity import LaunchDescriptionEntity
+from launch_ros.actions import Node
 
 from agimus_demos_common_kuka.launch_utils_kuka import (
     generate_default_kuka_args,
@@ -8,6 +9,7 @@ from agimus_demos_common_kuka.launch_utils_kuka import (
     required_node,
     SetupContext,
     include_path_join,
+    get_use_sim_time,
 )
 
 import agimus_demos_common_kuka.launch_nodes as nodes
@@ -54,6 +56,17 @@ def launch_setup(
         camera_embedded=camera_embedded)
 
     launch += [*required_node(detector_node)]
+
+    if pose_client:
+        launch += [
+            Node(
+                package="agimus_cardboard",
+                executable="pose_request_client",
+                parameters=[get_use_sim_time()],
+                arguments=["--period", "3"],
+                output="screen",
+            )
+        ]
 
     if use_rviz:
         launch += [include_path_join("launch", "kuka", "kuka_rviz.launch.py")]
