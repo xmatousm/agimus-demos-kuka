@@ -224,7 +224,15 @@ def generate_mpc_args():
     ]
 
 
-def generate_cardboard_detector_camera_args():
+def generate_cardboard_detector_camera_args(use_parts: bool = False):
+    add_args = [
+        DeclareLaunchArgument(
+            "pose_client",
+            default_value="false",
+            description="Use pose client to detect parts.",
+        ),
+    ] if use_parts else []
+
     return [
         DeclareLaunchArgument(
             "detector",
@@ -271,7 +279,7 @@ def generate_cardboard_detector_camera_args():
             description="Print some debug messages.",
             choices=["false", "true"],
         ),
-    ]
+    ] + add_args
 
 
 def get_use_sim_time() -> dict[str, LaunchConfiguration]:

@@ -137,19 +137,11 @@ def launch_setup(
 
     return launch
 
-def generate_launch_args():
-    return [
-        DeclareLaunchArgument(
-            "pose_client",
-            default_value="false",
-            description="Use pose client to detect parts.",
-        ) ]
 
 def generate_launch_description():
     return LaunchDescription(
         generate_default_kuka_args()
-        + generate_cardboard_detector_camera_args()
+        + generate_cardboard_detector_camera_args(use_parts=True)
         + generate_mpc_args()
-        + generate_launch_args()
         + [OpaqueFunction(function=launch_setup)]
     )
