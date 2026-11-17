@@ -7,6 +7,7 @@ from agimus_demos_common_kuka.launch_utils_kuka import (
     generate_cardboard_detector_camera_args,
     required_node,
     SetupContext,
+    include_path_join,
 )
 
 import agimus_demos_common_kuka.launch_nodes as nodes
@@ -27,6 +28,9 @@ def launch_setup(
     template_file = ctx.config_path("template")
     sample_file = ctx.config_path_optional("simulate")
     mask_file = ctx.config_path_optional("mask")
+    pose_client = ctx.config_bool("pose_client")
+
+    use_rviz = ctx.config_bool("use_rviz")
 
     launch = []
 
@@ -44,11 +48,15 @@ def launch_setup(
         simulate_file=sample_file,
         mask_file=mask_file,
         debug=True,
-        detect_holder=True,
+        detect_holder=not pose_client,
+        pose_client=pose_client,
         robot_calib_file=robot_calib_file,
         camera_embedded=camera_embedded)
 
     launch += [*required_node(detector_node)]
+
+    if use_rviz:
+        launch += [include_path_join("launch", "kuka", "kuka_rviz.launch.py")]
 
     return launch
 
@@ -56,6 +64,6 @@ def launch_setup(
 def generate_launch_description():
     return LaunchDescription(
         generate_default_kuka_args()
-        + generate_cardboard_detector_camera_args()
+        + generate_cardboard_detector_camera_args(use_parts=True)
         + [OpaqueFunction(function=launch_setup)]
     )
